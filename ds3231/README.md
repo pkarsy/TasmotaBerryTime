@@ -28,13 +28,15 @@ so the pins are in the same order as ds3231 (including 3.3V and GND), and can be
 
     > SetOption65 1
 
-    to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem.
+    to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem. Read the documentation however before setting this option.
 
 - Connect a spare GND from your ESP board to the DS3231. Connect a 3.3V output pin(NOT 5V)
  of the board to DS3231
 - Go to berry scripting console and type
- .> load('ds3231')
- You will see a message reporting success(or failure)
+
+    > load('ds3231')
+
+    You will see a message reporting success(or failure)
 - If all is OK put this in "autoexec.be"
 - If you have other berry files to load/import put it first, so the system time will be OK when the other files are loaded.
 
