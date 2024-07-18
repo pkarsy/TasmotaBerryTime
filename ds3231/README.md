@@ -15,9 +15,21 @@ use esp8266 (Berry cannot run there), use the builtin feature.
 ## Installation
 
 - upload the "ds3231.be" to the tasmota filesystem
-- In the PIN configuration, choose the most convenient PINs for you project as SDA and SCL. For example, the Luatos Esp32-c3 lite can be configured with SCL->GPIO4 SDA->GPIO5 so the pins are in the same order as ds3231 (including 3.3V and GND), and can be directly connected, or even soldered to the ESP module.
+- In the PIN configuration, choose the most convenient PINs for you project as SDA and SCL. For example, the Luatos Esp32-c3 lite can be configured with 
+
+```sh
+SCL->GPIO4
+SDA->GPIO5
+```
+
+so the pins are in the same order as ds3231 (including 3.3V and GND), and can be directly connected, or even soldered to the ESP module.
+
 - If your power source is unreliable
-TODO SetoptionXX to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem, when the battery is discharged.
+
+    > SetOption65 1
+
+    to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem.
+
 - Connect a spare GND from your ESP board to the DS3231. Connect a 3.3V output pin(NOT 5V)
  of the board to DS3231
 - Go to berry scripting console and type
@@ -29,12 +41,13 @@ TODO SetoptionXX to avoid unexplained resets to factory defaults. Battery power 
 ## Breakout battery problem
 
 ![DS3231 breakout](ds3231.jpg)
-The most popular (on online stores) breakout, has a weird design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable battery (LIR2032) . Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is a somewhat problematic choice anyway :
 
-- The availability or LIR2032 is small. And it is more expensive than CR2032.
-- It has a very low capacity and probably a limited shelf life.
-- With ESP(or any other 3.3V MCU) we want the DS3231-VCC to be 3.3V and the LIR2032 cannot be charged.
-- It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged.
+The most popular (on online stores) breakout, has a weird design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable battery (LIR2032). Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is a somewhat problematic choice anyway :
+
+- The LIR2032 is no nearly as common, and it is more expensive than CR2032.
+- It has a very low capacity and higher shelf discharge rate than CR2032.
+- With ESP(or any other 3.3V MCU) we want the DS3231-VCC to be 3.3V and the LIR2032 cannot be charged with this voltage.
+- It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged. Not sure about this.
 
 For the above reasons use the very common CR2032. It can last 10 years according to data sheets. To avoid damaging the non rechargeable CR2032 cell, you must de-solder the diode (or the resistor).
 
