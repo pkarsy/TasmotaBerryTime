@@ -306,8 +306,8 @@ gnsstime_func = nil
 
 ### If you do not want to touch this file, put these lines in autoexec
 ### after load('gnsstime')
-global.gnsstime.start(2, 9600) # pin=2 baud=9600
-global.gnsstime.update_every(10) # update the system time every 60 seconds
+#global.gnsstime.start(2, 9600) # pin=2 baud=9600
+#global.gnsstime.update_every(10) # update the system time every 60 seconds
 
       # print(sentence)
       #if self.first_sentence == ''
