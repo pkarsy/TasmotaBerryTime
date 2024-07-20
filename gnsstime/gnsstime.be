@@ -308,21 +308,3 @@ gnsstime_func = nil
 ### after load('gnsstime')
 #global.gnsstime.start(2, 9600) # pin=2 baud=9600
 #global.gnsstime.update_every(10) # update the system time every 60 seconds
-
-      # print(sentence)
-      #if self.first_sentence == ''
-      #  self.first_sentence = sentence
-      #elif sentence == self.first_sentence
-      #  self._stop_fast_loop()
-      #  return
-      #end
-
-
-    #- def _parse_gga(buf)
-      # $GPGGA,,,,,,0,00,99.99,,,,,,*48
-      buf = string.split(buf, ',') # now buf is a list of values
-      if size(buf)!=15 print('GGA fields!=15') return end
-      var sat = int(buf[7])
-      print(MSG + str(sat) + ' active satelites')
-      #return
-    end -#
