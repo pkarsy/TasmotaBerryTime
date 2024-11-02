@@ -45,10 +45,27 @@ it is unused. Check the manufacturer of the breakout, LOLIN, WEMOS, etc for the 
 
 ## Software installation
 
-Upload the file "gnsstime.be" to the tasmota filesystem.
+- paste this to Berry Scripting Console
+```berry
+do
+  var fn = 'gnsstime.be'
+  var cl = webclient()
+  var url = 'https://raw.githubusercontent.com/pkarsy/TasmotaBerryTime/refs/heads/main/gnsstime/' + fn
+  cl.begin(url)
+  if cl.GET() != 200 print('Error getting', fn) return end
+  var s = cl.get_string()
+  cl.close()
+  var f = open('/'+fn, 'w')
+  f.write(s)
+  f.close()
+  print('Installed', fn)
+end
+```
+Or upload the file "gnsstime.be" to the tasmota filesystem.
+
 Put this to "autoexec.be", but first test in berry console :
 
-```sh
+```berry
 load('gnsstime')
 # here is the TX-pin of GNSS to the GPIO-4 of ESP32(s2)(c3) baud is 9600
 # The factory default for at least UBLOX NEO 6 7 8 series
