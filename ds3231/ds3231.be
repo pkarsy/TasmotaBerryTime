@@ -72,7 +72,7 @@ def ds3231_func()
       self.addr = 0x68
       self.w = tasmota.wire_scan(self.addr)
       if self.w == nil
-        print( MSG+'chip not detected' )
+        print( MSG+'chip not detected. Ensure SDA and SDL are configured correctly in Tasmota config menu, and VCC(3.3) GND SDA SCL are connected' )
       else
         #
         print( MSG+'found DS3231 chip' )

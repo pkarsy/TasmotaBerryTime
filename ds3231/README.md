@@ -13,8 +13,23 @@ use esp8266 (Berry cannot run there), use the builtin feature.
 - *probably* works with DS3232 (not tested)
 
 ## Installation
-
-- upload the "ds3231.be" to the tasmota filesystem
+- paste this to Berry Scripting Console
+```berry
+do
+  var fn = 'ds3231.be'
+  var cl = webclient()
+  var url = 'https://raw.githubusercontent.com/pkarsy/TasmotaBerryTime/refs/heads/main/ds3231/' + fn
+  cl.begin(url)
+  if cl.GET() != 200 print('Error getting', fn) return end
+  var s = cl.get_string()
+  cl.close()
+  var f = open('/'+fn, 'w')
+  f.write(s)
+  f.close()
+  print('Installed', fn)
+end
+```
+Or upload the "ds3231.be" to the tasmota filesystem
 - In the PIN configuration, choose the most convenient PINs for you project as SDA and SCL. For example, the Luatos Esp32-c3 lite can be configured with 
 
 ```sh
