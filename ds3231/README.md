@@ -30,7 +30,7 @@ do
 end
 ```
 Or upload the "ds3231.be" to the tasmota filesystem
-- In the PIN configuration, choose the most convenient PINs for you project as SDA and SCL. For example, the Luatos Esp32-c3 lite can be configured with 
+- In the PIN configuration, choose the most convenient PINs for you project as SDA and SCL. For example, the Luatos Esp32-c3 can be configured with 
 
 ```sh
 SCL->GPIO4
@@ -53,12 +53,17 @@ so the pins are in the same order as ds3231 (including 3.3V and GND), and can be
 
     You will see a message reporting success(or failure)
 - If all is OK put this in "autoexec.be"
-- If you have other berry files to load/import put it first, so the system time will be OK when the other files are loaded.
+- If you have other berry files to load/import put the line
+> load('ds3231')
+first, so the system time will be OK when the other files are loaded.
 
 ## Breakout battery problem
 
 ![DS3231 breakout](ds3231.jpg)
 
+**In short, when using 3.3V for VCC (ESP32, STM32 etc) just put a CR2032 and you are ready to go.**
+
+More details now :
 The most popular (on online stores) breakout, has a weird design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable battery (LIR2032). Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is a somewhat problematic choice anyway :
 
 - The LIR2032 is no nearly as common, and it is more expensive than CR2032.
@@ -66,13 +71,15 @@ The most popular (on online stores) breakout, has a weird design choice. In part
 - With ESP(or any other 3.3V MCU) we want the DS3231-VCC to be 3.3V and the LIR2032 cannot be charged with this voltage.
 - It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged. Not sure about this.
 
-For the above reasons use the very common CR2032. It can last 10 years according to data sheets. To avoid damaging the non rechargeable CR2032 cell, you must de-solder the diode (or the resistor).
+For the above reasons use the very common CR2032. It can last 10 years according to data sheets.
+**If you are using 5V (Arduino Uno for example) for the VCC, you must de-solder the diode (or the resistor), to avoid damaging the non rechargeable CR2032 cell**
+Of course it does not hurt to desolder the diode on 3.3V systems, but it is not necessary.
 
 Finally, do not trust the coin cell (if came) with the module, use a new one.
 
 ## How the driver works
 
-The DS3231 has 7 registers containing year month etc. At boot the module reads all those registers and assembles the "epoch" time and sets the system time. When(if) the internet becomes available the opposite operation is done.
+The DS3231 has 7 registers containing year month etc. At boot the module reads all those registers and assembles the "epoch" time and sets the system time. When(if) the internet becomes available the oposite operation is done.
 I don't know if the native tasmota DS3231 code does it, but this module updates the RTC clock periodically (on every NTP update, about every hour). This way the RTC clock remains always accurate, unless of course the ESP is without internet connection for extended periods of time.
 
 ## Limitations
