@@ -1,21 +1,6 @@
 # MIT licence
 # C Panagiotis Karagiannis https://github.com/pkarsy/
 
-# Does not try to implement all features of DS3231
-# probably works with DS3232 (not tested)
-# works only for time get and time set (No alarms or other chip features)
-# The breakout found on online stores also contains an EEPROM chip
-# which is not handled here
-# The tasmota system has support for DS3231 but needs a custom build
-# This module allows to use the DS3231 on ESP32(or s2 c3 etc)
-# using the stock firmware
-# I dont know if the native DS3231 code does it, but this module
-# updates the RTC clock periodically (on every NTP update) so the
-# RTC clock remains always accurate, unless of course the ESP is
-# without internet connection for long periods of time. If the system
-# is expected to be without internet for extended periods months or years
-# check the gnsstime module
-
 # Useful when developing this driver. Allows to clean the module so 
 if global.ds3231 != nil
   print('Cleaning old ds3231 instance')
@@ -29,18 +14,17 @@ def ds3231_func()
   var MSG='DS3231: '
 
   # helper functions for the communication with DS3231.
-  #
   # Returns a string with len=2. For this specific case
   # the string is more handy than an integer.
   def bcd2int(x)
     return str(x/16) + str(x%16)
   end
-  #
+
   # returns a BCD encoded integer
   def int2bcd(x)
     return (x/10)*16+(x%10)
   end
-  #
+  
   # converts the system time to the format DS3231 accepts but does not write
   # anything to the DS3231 registers
   def system2bcd()
@@ -129,7 +113,7 @@ def ds3231_func()
       print(MSG + 'Using NTP to update the DS3231 time')
     end
 
-  end
+  end # class DS3231
   # Create a single instance, we need just one, and we make it a global var
   global.ds3231 = DS3231()
   

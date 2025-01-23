@@ -39,23 +39,14 @@ SDA->GPIO5
 
 so the pins are in the same order as ds3231 (including 3.3V and GND), and can be directly connected, or even soldered to the ESP module.
 
-- If your power source is unreliable
-
-    > SetOption65 1
-
-    to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem. Read the documentation however before setting this option.
-
 - Connect a spare GND from your ESP board to the DS3231. Connect a 3.3V output pin(NOT 5V)
  of the board to DS3231
 - Go to berry scripting console and type
-
-    > load('ds3231')
-
-    You will see a message reporting success(or failure)
-- If all is OK put this in "autoexec.be"
-- If you have other berry files to load/import put the line
-> load('ds3231')
-first, so the system time will be OK when the other files are loaded.
+```
+load('ds3231')
+```
+You will see a message reporting success(or failure)
+- If all is OK put this in "autoexec.be". The line should be the first in autoexec if you have other modules to load. This way the time will be correct when the other moudules are loaded.
 
 ## Breakout battery problem
 
@@ -76,6 +67,13 @@ For the above reasons use the very common CR2032. It can last 10 years according
 Of course it does not hurt to desolder the diode on 3.3V systems, but it is not necessary.
 
 Finally, do not trust the coin cell (if came) with the module, use a new one.
+
+## Unreliable power
+- If your power source is unreliable
+
+    > SetOption65 1
+
+    in tasmota console, to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem. Read the documentation however before setting this option.
 
 ## How the driver works
 
