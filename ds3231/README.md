@@ -95,7 +95,7 @@ load('ds3231')
 
 ![DS3231 breakout](ds3231.jpg)
 
-**For the impatient, when using 3.3V for VCC (ESP32, STM32 etc) just put a CR2032 and you are ready to go.**
+**For the impatient, yes the design of this breakout is poor, but when used with 3.3V for VCC (ESP32, STM32 etc) no moifications are necessary. Just put a good quility CR2032 (Not LIR !) and you are ready to go.**
 
 More details now :
 The most popular (on online stores) breakout, has a weird design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable coin cell (LIR2032). Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is a somewhat problematic choice anyway :
