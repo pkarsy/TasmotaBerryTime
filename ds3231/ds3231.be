@@ -3,15 +3,17 @@
 
 # Useful when developing this driver. Allows to clean the module so 
 if global.ds3231 != nil
-  print('Cleaning old ds3231 instance')
-  global.ds3231.stop()  # TODO not implemented
+  global.ds3231.stop()
+  tasmota.gc()
 end
 
 # We encapsulate all functionality inside a function to avoid pulluting the global namespace
-def ds3231_func()
+def ds3231_combo()
   import strict
 
   var MSG='DS3231: '
+  var RULE='Time#Set'
+  var RULEID='ds3231'
 
   # helper functions for the communication with DS3231.
   # Returns a string with len=2. For this specific case
@@ -28,7 +30,7 @@ def ds3231_func()
   # converts the system time to the format DS3231 accepts but does not write
   # anything to the DS3231 registers
   def system2bcd()
-    var t = tasmota.rtc()['utc']
+    var t = tasmota.rtc_utc()
     # now t is epoch time (integer seconds from 1/1/1970)
     t = tasmota.time_dump(t)
     # now t is something like
@@ -52,21 +54,24 @@ def ds3231_func()
     var addr
 
     def init()
-      # todo better test
       self.addr = 0x68
+      if global.('DS3231_ADDR')!=nil
+        self.addr = global.DS3231_ADDR
+      end
       self.w = tasmota.wire_scan(self.addr)
       if self.w == nil
-        print( MSG+'chip not detected. Ensure SDA and SDL are configured correctly in Tasmota config menu, and VCC(3.3) GND SDA SCL are connected' )
+        import string
+        print( MSG+'The chip is not detected at the I2C address 0x' + string.hex(self.addr))
       else
         print( MSG+'found DS3231 chip' )
         # TODO dedicated UTC function
-        if tasmota.rtc()['utc']<1716100000 # The system time is certainly wrong if true
+        if tasmota.rtc_utc()<1716100000 # The system time is certainly wrong
           self.rtc2system()
         else # The system time may be wrong/correct but we cant be sure
-          print('System time seems to be set, call rtc2system() to force an update')
+          print('System time seems to be set, call rtc2system() or system2rtc() to force an update')
         end
-        # Every time the system gets NTP time the RTC is updated (about every 1 hour)
-        tasmota.add_rule('Time#Set', /->self.system2rtc())
+        # Every time the system gets NTP time the RTC is updated (about every hour)
+        tasmota.add_rule(RULE, /->self.system2rtc(), RULEID)
       end
     end
 
@@ -112,14 +117,24 @@ def ds3231_func()
       print(MSG + 'Using NTP to update the DS3231 time')
     end
 
+    def stop()
+      tasmota.remove_rule(RULE, RULEID)
+    end
+
+    def deinit()
+      print(self, 'deinit()')
+    end
+
+    
+
   end # class DS3231
   # Create a single instance, we need just one, and we make it a global var
-  global.ds3231 = DS3231()
   
+  global.ds3231 = DS3231()
 end
 
 # Creates a DS3231 instance called ds3231 (global var)
-ds3231_func()
+ds3231_combo()
 # We prevent the creation of other instances
-ds3231_func = nil
+ds3231_combo = nil
 # After all that, the only var left is the global instance "ds3231"
