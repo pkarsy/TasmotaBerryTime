@@ -58,12 +58,11 @@ def ds3231_func()
       if self.w == nil
         print( MSG+'chip not detected. Ensure SDA and SDL are configured correctly in Tasmota config menu, and VCC(3.3) GND SDA SCL are connected' )
       else
-        #
         print( MSG+'found DS3231 chip' )
-        # TODO dedicate UTC function
+        # TODO dedicated UTC function
         if tasmota.rtc()['utc']<1716100000 # The system time is certainly wrong if true
           self.rtc2system()
-        else # The system time may still be wrong but we cant be sure
+        else # The system time may be wrong/correct but we cant be sure
           print('System time seems to be set, call rtc2system() to force an update')
         end
         # Every time the system gets NTP time the RTC is updated (about every 1 hour)
