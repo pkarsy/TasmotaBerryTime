@@ -1,15 +1,15 @@
-# DS3231 berry driver for tasmota
+# DS3231 driver for tasmota, written in the Berry scripting language.
 
 ## Purpose
 
-The tasmota system already contains support for DS3231, but only on custom builds. This driver offers this functionality for stock esp32xx images. If your node needs a custom image anyway or if you
+The tasmota system already contains support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32xx images. If your node needs a custom image anyway or if you
 use esp8266 (Berry cannot run there), use the builtin feature.
 
 ## Characteristics
 
 - Does not try to implement all the features of DS3231, only time get and time set (No alarms or other DS3231 chip features)
-- The breakout found on online stores also contains an EEPROM chip which is not handled here
-- The code is event driven (as it should in berry). The ESP is free to do all usual tasmota tasks and can run other berry code.
+- The blue breakout found on online stores, also contains an EEPROM chip which is not handled here
+- The code is event driven (as it should in berry). The ESP is free to do all usual tasmota tasks and can also run other berry code.
 - *probably* works with DS3232 (not tested)
 
 ## Installation
@@ -30,29 +30,53 @@ do
 end
 ```
 Or upload the "ds3231.be" to the tasmota filesystem
-- In the PIN configuration, choose the most convenient PINs for you project as SDA and SCL. For example, the Luatos Esp32-c3 can be configured with 
 
+# Coonecting the DS3231 breakout board
+
+The DS3231 breakout board has 6 pins but we will use 4 : GND VCC SDA SCL
+Now we configure Tasmota ESP32 :
+TasmotaMain -> Configuration -> Module
+
+- Choose the most convenient PINs for you project.
+for example the ESP32 devkit and similar boards can be configured as:
 ```sh
-SCL->GPIO4
-SDA->GPIO5
+GND (Onboard)
+GPIO 19 -> OutputHi (acts as VCC)
+GPIO 18 -> SDA
+GPIO 5 -> SCL
 ```
 
-so the pins are in the same order as ds3231 (including 3.3V and GND), and can be directly connected, or even soldered to the ESP module.
+the Luatos Esp32-C3 can be configured as : 
 
-- Connect a spare GND from your ESP board to the DS3231. Connect a 3.3V output pin(NOT 5V)
- of the board to DS3231
+```sh
+GND (onboard)
+VCC 3.3 (onboard)
+GPIO 5 -> SDA
+GPIO 4 -> SCL
+```
+
+For the ESP32-C3 32S Ai-thinker
+```sh
+GND (onboard) TODO
+VCC 3.3 (onboard) TODO
+GPIO 5 -> SDA
+GPIO 4 -> SCL
+```
+
+so the pins are in the same order as DS3231 (including GND and 3.3V), and can be directly connected to the ESP board.
+
 - Go to berry scripting console and type
 ```
 load('ds3231')
 ```
-You will see a message reporting success(or failure)
-- If all is OK put this in "autoexec.be". The line should be the first in autoexec if you have other modules to load. This way the time will be correct when the other moudules are loaded.
+You will see a message hopefully reporting success.
+- If all is OK put this in "autoexec.be". The line should be the first in autoexec if you have other modules to load. This way the time will be correct when those moudules are loaded.
 
 ## Breakout battery problem
 
 ![DS3231 breakout](ds3231.jpg)
 
-**In short, when using 3.3V for VCC (ESP32, STM32 etc) just put a CR2032 and you are ready to go.**
+**For the impatient, when using 3.3V for VCC (ESP32, STM32 etc) just put a CR2032 and you are ready to go.**
 
 More details now :
 The most popular (on online stores) breakout, has a weird design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable battery (LIR2032). Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is a somewhat problematic choice anyway :
@@ -70,10 +94,10 @@ Finally, do not trust the coin cell (if came) with the module, use a new one.
 
 ## Unreliable power
 - If your power source is unreliable
-
-    > SetOption65 1
-
-    in tasmota console, to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem. Read the documentation however before setting this option.
+  ```
+  SetOption65 1
+  ```
+  in tasmota console, to avoid unexplained resets to factory defaults. Battery power can easily lead to this problem. Read the documentation however before setting this option.
 
 ## How the driver works
 
