@@ -96,7 +96,7 @@ def ds3231_combo()
       if t<ctime t=ctime end # we set the time with an outdated but at least non zero value
       # I found that the rule time#set only works when the time is set initially
       # even whith an oudated value
-      tasmota.cmd('time ' .. t, true)
+      tasmota.cmd('time ' .. t+1, true) # +1 to compensate the delay when fetching the time
       if t>ctime
         print(MSG+'Updated the system time from RTC chip')
       else
