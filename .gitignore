@@ -1,5 +1,6 @@
 .vscode
 removePass
-*upload-ds3231
-*upload-gnsstime
+upload-ds3231
+upload-gnsstime
+.gitignore
 .gitignore
