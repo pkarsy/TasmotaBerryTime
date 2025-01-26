@@ -1,5 +1,7 @@
 # DS3231 driver for tasmota, written in the Berry scripting language.
 
+![DS3231 breakout](ds3231.jpg)
+
 ## Notice
 The tasmota system already contains support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32xx images. If your node needs a custom image anyway or if you
 use esp8266 (Berry cannot run there), use the builtin feature.
@@ -83,10 +85,10 @@ load('ds3231')
 You will see a message hopefully reporting success.
 
 ## Automatically load the driver at startup
-```sh
+
 WebInterface -> Tools -> Manage Filesystem -> Edit "autoexec.be"
-# or create a new file with this name
-```
+
+Or create a new file with this name
 
 At the top of the file (to get the time as soon as possible) add the line:
 ```sh
@@ -96,9 +98,7 @@ This way we can have the time before(if) the WIFI is up, and before the other be
 
 ## Blue Breakout coin cell selection
 
-![DS3231 breakout](ds3231.jpg)
-
-**For 3.3V boards (and ESP32 is 3.3V), if a LIR2032 is installed, you have to remove it and install a good quility CR2032 (Not LIR !). Even if a CR2032 is installed, better use a new one.  More details at the end of the page.**
+For 3.3V boards (and ESP32 is 3.3V), if a LIR2032 is installed, you have to remove it and install a good quility CR2032 (Not LIR !). Even if a CR2032 is installed, better use a new one.  More details at the end of the page.
 
 ## Unreliable power
 If your power source is unreliable
