@@ -94,26 +94,11 @@ load('ds3231')
 ```
 This way we can have the time before(if) the WIFI is up, and before the other berry modules are loaded.
 
-## Breakout battery problem
+## Blue Breakout coin cell selection
 
 ![DS3231 breakout](ds3231.jpg)
 
-**For the impatient, yes the design of this breakout is poor, but for 3.3V boards (ESP32, STM32 etc) no modifications are necessary. Just put a good quility CR2032 (Not LIR !) and you are OK.**
-
-More details now :
-The most popular (on online stores) breakout, has a weird/poor design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable coin cell (LIR2032). Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is a somewhat problematic choice anyway :
-
-- The LIR2032 is no nearly as common, and it is more expensive than CR2032.
-- It has a very low capacity and higher shelf discharge rate than CR2032.
-- With ESP(or any other 3.3V MCU) VCC=3.3V and the LIR2032 cannot be charged.
-- It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged. Not sure about this.
-- According to online sources, voltages more than 4.7 V can potentially damage the coin cell.
-
-For the above reasons use the very common CR2032 and ignore the charging circuit. It can last 10 years according to data sheets.
-**If you are using 5V (Arduino Uno for example) for the VCC, you must de-solder the diode (or the resistor), to avoid damaging the non rechargeable CR2032 cell**
-Of course it does not hurt to desolder the diode on 3.3V systems, but it is not necessary.
-
-Finally, do not trust the coin cell (if came) with the module, use a new one.
+**For 3.3V boards (and ESP32 is 3.3V), if a LIR2032 is installed, you have to remove it and install a good quility CR2032 (Not LIR !). Even if a CR2032 is installed, better use a new one.  More details at the end of the page.**
 
 ## Unreliable power
 If your power source is unreliable
@@ -130,3 +115,18 @@ I don't know if the native tasmota DS3231 code does it, but this module updates 
 ## Limitations
 
 Although very accurate(2ppm), the DS3231 can be off by 1min per year. If the module is going to be used standalone (without internet) and you need better accuracy, you might consider using a GNSS module(No time drift, ever). The tasmota system have support for UBLOX modules (again a custom build is needed). This repository contains also "gnsstime" which serves the same purpose as ds3231 and does not require a custom build.
+
+
+## Optional, More details about the blue DS3231 breakout :
+The most popular (on online stores) breakout, has a weird/poor design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable coin cell (LIR2032). Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is a somewhat problematic choice anyway :
+
+- The LIR2032 is no nearly as common, and it is more expensive than CR2032.
+- It has a very low capacity and higher shelf discharge rate than CR2032.
+- With ESP(or any other 3.3V MCU) VCC=3.3V and the LIR2032 cannot be charged.
+- It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged(not sure about this). With 3.3V the cell will be always discharged anyway.
+- According to online sources, voltages more than 4.7 V can potentially damage the coin cell. This does not affect 3.3 boards.
+
+For the above reasons use the very common CR2032 and ignore the charging circuit. It can last 10 years according to data sheets. If you are using 5V for the VCC(Not ESP32, not this driver), you must de-solder the diode (or the resistor), to avoid damaging the non rechargeable CR2032 cell.
+**Of course it does not hurt to desolder the diode on 3.3V systems , but it is not necessary.**
+
+Finally, do not trust the coin cell (if came) with the module, use a new one.
