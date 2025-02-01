@@ -103,7 +103,6 @@ def ds3231_combo()
         print(MSG+'The RTC time is wrong, connect at least once to the internet')
       end
       tasmota.cmd('time 0', true) # this is to reenable NTP time updates
-      
     end
 
     def system2rtc()
@@ -121,11 +120,14 @@ def ds3231_combo()
       tasmota.remove_rule(RULE, RULEID)
     end
 
+    def active()
+      if self.w == nil return false
+      else return true end
+    end
+
     def deinit()
       print(self, 'deinit()')
     end
-
-    
 
   end # class DS3231
   # Create a single instance, we need just one, and we make it a global var
