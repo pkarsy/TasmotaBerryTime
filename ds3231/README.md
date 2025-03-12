@@ -1,12 +1,14 @@
-# DS3231 driver for tasmota, written in the Berry scripting language.
+# DS3231 driver for tasmota ESP32x, written in the Berry scripting language.
 
 ![DS3231 breakout](ds3231.jpg)
 
 ## Notice
-The tasmota system has support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32xx images.
+The tasmota system has support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32x images.
 
 ## Characteristics
-- Does not try to implement all the features of DS3231, only time get and time set (No alarms or other DS3231 chip features).
+- It is tested and working with ESP32 ESP32-S2 and ESP32-C3.
+- ESP8266 is not working, it cannot run Berry. You can build a custom tasmota image for this case.
+- Only time get and time set (No alarms or other DS3231 chip features).
 - The blue breakout found on online stores, also contains an EEPROM chip which is not handled here.
 - The code is event driven (as it should in berry). The ESP is free to do all usual tasmota tasks and can also run other berry code.
 
@@ -32,11 +34,11 @@ end
 ```
 Or upload the "ds3231.be" to the tasmota filesystem
 
-# Conecting the DS3231 breakout board
+# Conecting the DS3231 breakout
 
-The DS3231 breakout board has 6 pins but we need 4 : **GND VCC SDA SCL**
+We need 4 pins : **GND VCC SDA SCL**
 
-Now we have to configure  the Tasmota pins.
+Now we have to configure Tasmota to use those pins .
 ```
 TasmotaMain -> Configuration -> Module
 ```
