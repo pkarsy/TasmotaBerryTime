@@ -1,15 +1,18 @@
-# MIT licence
-# C Panagiotis Karagiannis https://github.com/pkarsy/
+# Panagiotis Karagiannis
+# https://github.com/pkarsy/TasmotaBerryTime/
 
-# Useful when developing this driver. Allows to clean the module so 
-if global.ds3231 != nil
-  global.ds3231.stop()
-  tasmota.gc()
-end
-
-# We encapsulate all functionality inside a function to avoid pulluting the global namespace
-def ds3231_combo()
+# We encapsulate all functionality inside this block 
+# to avoid pulluting the global namespace
+do
   import strict
+
+  # Useful when developing this driver. Allows to clean the runtime
+  # objects and reloading the code
+  if global.ds3231 != nil
+    global.ds3231.stop()
+    global.ds3231 = nil
+    tasmota.gc()
+  end
 
   var MSG='DS3231: '
   var RULE='Time#Set'
@@ -134,9 +137,3 @@ def ds3231_combo()
   
   global.ds3231 = DS3231()
 end
-
-# Creates a DS3231 instance called ds3231 (global var)
-ds3231_combo()
-# We prevent the creation of other instances
-ds3231_combo = nil
-# After all that, the only var left is the global instance "ds3231"
