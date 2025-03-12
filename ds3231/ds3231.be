@@ -133,6 +133,6 @@ do
     end
 
   end # class DS3231
-  # We create a single instance, we need just one, and we make it a global var
+  # We need just one instance, and we make it global
   global.ds3231 = DS3231()
 end

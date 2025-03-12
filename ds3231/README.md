@@ -12,7 +12,7 @@ The tasmota system has support for DS3231, but only on custom builds. This drive
 - The blue breakout found on online stores, also contains an EEPROM chip which is not handled here.
 - The code is event driven (as it should in berry). The ESP is free to do all usual tasmota tasks and can also run other berry code.
 
-## Installation
+## Driver Installation
 Tasmota Web Interface -> tools -> Berry Scripting Console
 
 Paste and execeute this code
@@ -90,7 +90,9 @@ I don't know if the native tasmota DS3231 code does it, but this module updates 
 ## Limitations
 Although very accurate(2ppm), the DS3231 can be off by 1min per year. If the module is going to be used standalone (without internet) and you need better accuracy, you might consider using a GNSS module(No time drift, ever). The tasmota system have support for UBLOX modules (again a custom build is needed). This repository contains also "gnsstime" which serves the same purpose as ds3231 and does not require a custom build.
 
-## Optional, More details about the blue DS3231 breakout :
+## Optional topics
+
+### More details about the blue DS3231 breakout
 The most popular (on online stores) breakout, has a weird design choice. In particular it has a primitive charging circuitry (a diode and a resistor in series) and is trying to charge a rechargeable coin cell (LIR2032). Most of the time however the breakout is sold with a normal (CR2032) or no battery at all. The use of a rechargeable battery is problematic:
 
 - The LIR2032 is no nearly as common, and it is more expensive than CR2032.
@@ -101,6 +103,7 @@ The most popular (on online stores) breakout, has a weird design choice. In part
 
 For the above reasons use the very common CR2032 cell. It can last 10 years (according to data sheets).
 
+### 5V MCUS
 If you are using 5V for the VCC(Arduino UNO for example, no ESP32, not this driver), [disable the charging circuit](https://duckduckgo.com/?q=ds3231+disable+charging&t=lm&iar=images&iax=images&ia=images), to avoid damaging the non rechargeable CR2032 cell. Of course it does not hurt to desolder the diode on 3.3V boards(ESP32 STM32 etc) , but it is not necessary.
 
 Finally, do not trust the coin cell (if came) with the module, use a new one.
