@@ -3,17 +3,18 @@
 ![DS3231 breakout](ds3231.jpg)
 
 ## Notice
-The tasmota system already contains support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32xx images. If your node needs a custom image anyway or if you
-use esp8266 (Berry cannot run there), use the builtin feature.
+The tasmota system has support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32xx images.
 
 ## Characteristics
 - Does not try to implement all the features of DS3231, only time get and time set (No alarms or other DS3231 chip features).
 - The blue breakout found on online stores, also contains an EEPROM chip which is not handled here.
 - The code is event driven (as it should in berry). The ESP is free to do all usual tasmota tasks and can also run other berry code.
-- *probably* works with DS3232 (not tested).
 
 ## Installation
-Paste this to Berry Scripting Console
+Tasmota Web Interface -> tools -> Berry Scripting Console
+
+Paste and execeute this code
+
 ```berry
 do
   var fn = 'ds3231.be'
@@ -33,7 +34,7 @@ Or upload the "ds3231.be" to the tasmota filesystem
 
 # Conecting the DS3231 breakout board
 
-The DS3231 breakout board has 6 pins but we need just 4 : **GND VCC SDA SCL**
+The DS3231 breakout board has 6 pins but we need 4 : **GND VCC SDA SCL**
 
 Now we have to configure  the Tasmota pins.
 ```
@@ -86,7 +87,7 @@ You will see a message hopefully reporting success.
 
 ## Automatically load the driver at startup
 
-WebInterface -> Tools -> Manage Filesystem -> Edit "autoexec.be"
+Tasmota Web Interface -> Tools -> Manage Filesystem -> Edit "autoexec.be" (The white icon with the pencil)
 
 Or create a new file with this name
 
@@ -123,8 +124,8 @@ The most popular (on online stores) breakout, has a weird design choice. In part
 - It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged(not sure about this). With 3.3V the cell will be always discharged and the time will be lost on every power outage.
 - According to online sources, voltages more than 4.7 V can potentially damage the coin cell. This does not affect 3.3 boards.
 
-For the above reasons use the very common CR2032 and ignore the charging circuit. It can last 10 years (according to data sheets).
+For the above reasons use the very common CR2032 cell. It can last 10 years (according to data sheets).
 
-If you are using 5V for the VCC(Arduino UNO for example, no ESP32, not this driver), you must de-solder the diode (or the resistor), to avoid damaging the non rechargeable CR2032 cell. Of course it does not hurt to desolder the diode on 3.3V boards(ESP32 STM32 etc) , but it is not necessary.
+If you are using 5V for the VCC(Arduino UNO for example, no ESP32, not this driver), [disable the charging circuit](https://duckduckgo.com/?q=ds3231+disable+charging&t=lm&iar=images&iax=images&ia=images), to avoid damaging the non rechargeable CR2032 cell. Of course it does not hurt to desolder the diode on 3.3V boards(ESP32 STM32 etc) , but it is not necessary.
 
 Finally, do not trust the coin cell (if came) with the module, use a new one.
