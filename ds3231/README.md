@@ -42,43 +42,16 @@ Now we have to configure Tasmota to use those pins .
 ```
 TasmotaMain -> Configuration -> Module
 ```
-For the maximum convenience we can set them to have the same order as in the DS3231 board. Examples are:
+For the maximum convenience we can set them to have the same order as in the DS3231 board.
 
-ESP32 devkit :
+For ESP32 devkit as shown in the schematic above :
 ```sh
 GPIO 26 -> OutputLow (acts as GND) Do not cascade more devices, only DS3231
 GPIO 25 -> OutputHi (acts as VCC) only DS3231
 GPIO 33 -> I2C SDA
 GPIO 32 -> I2C SCL
-# wasteful on GPIO pins but works on all variants
+# OK it is wasteful on GPIO pins but makes the connection easy.
 # If you want to cascade more I2C devices, use normal GND and VCC
-```
-
-ESP32 WeMos LOLIN32 Lite :
-```sh
-GPIO 14 -> OutputLow (acts as GND) Do not cascade more devices, only DS3231
-GPIO 27 -> OutputHi  (acts as VCC) only DS3231
-GPIO 26 -> I2C SDA
-GPIO 25 -> I2C SCL
-# The board has only 1 GND and we spare it for other uses
-# If you want to cascade more I2C devices, use normal GND and VCC
-```
-
-Luatos Esp32-C3 :
-```sh
-GND (onboard)
-VCC 3.3 (onboard)
-GPIO 5 -> I2C SDA
-GPIO 4 -> I2C SCL
-# the board happens to have GND and VCC in correct order.
-```
-
-ESP32-C3 32S Ai-thinker :
-```sh
-GND (onboard)
-VCC 3.3 (onboard)
-GPIO 10 -> I2C SDA
-GPIO 9 -> I2C SCL
 ```
 
 Now we test the module. Go to Berry scripting console and type
