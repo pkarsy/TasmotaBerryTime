@@ -1,6 +1,6 @@
 # DS3231 driver for tasmota ESP32x, written in the Berry scripting language.
 
-![DS3231 breakout](ds3231.jpg)
+![DS3231 breakout](ds3231.png)
 
 ## Notice
 The tasmota system has support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32x images.
@@ -36,7 +36,7 @@ Or upload the "ds3231.be" to the tasmota filesystem
 
 # Conecting the DS3231 breakout
 
-We need 4 pins : **GND VCC SDA SCL**
+We need 4 pins : **GND VCC SDA SCL** These pins are populated on both sides of the board, use the most convenient.
 
 Now we have to configure Tasmota to use those pins .
 ```
