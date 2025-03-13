@@ -39,9 +39,9 @@ Or upload the "ds3231.be" to the tasmota filesystem
 We need 4 pins : **GND VCC SDA SCL** These pins are populated on both sides of the board, use the most convenient.
 
 Now we have to configure Tasmota to use those pins .
-```
+
 TasmotaMain → Configuration → Module
-```
+
 For the maximum convenience we can set them to have the same order as in the DS3231 board.
 
 For ESP32 devkit as shown in the schematic above :
