@@ -1,6 +1,6 @@
 # DS3231 driver for tasmota ESP32x, written in the Berry scripting language.
 
-![DS3231 breakout](ds3231.png)
+![DS3231](ds3231.png)
 
 ## Notice
 The tasmota system has support for DS3231, but only on custom builds. This driver offers this functionality for stock Tasmota esp32x images.
@@ -13,7 +13,7 @@ The tasmota system has support for DS3231, but only on custom builds. This drive
 - The code is event driven (as it should in berry). The ESP is free to do all usual tasmota tasks and can also run other berry code.
 
 ## Driver Installation
-Tasmota Web Interface -> tools -> Berry Scripting Console
+Tasmota Web Interface → tools → Berry Scripting Console
 
 Paste and execeute this code
 
@@ -40,16 +40,16 @@ We need 4 pins : **GND VCC SDA SCL** These pins are populated on both sides of t
 
 Now we have to configure Tasmota to use those pins .
 ```
-TasmotaMain -> Configuration -> Module
+TasmotaMain → Configuration → Module
 ```
 For the maximum convenience we can set them to have the same order as in the DS3231 board.
 
 For ESP32 devkit as shown in the schematic above :
 ```sh
-GPIO 26 -> OutputLow (acts as GND) Do not cascade more devices, only DS3231
-GPIO 25 -> OutputHi (acts as VCC) only DS3231
-GPIO 33 -> I2C SDA
-GPIO 32 -> I2C SCL
+GPIO 26 → OutputLow (acts as GND) Do not cascade more devices, only DS3231
+GPIO 25 → OutputHi (acts as VCC) only DS3231
+GPIO 33 → I2C SDA
+GPIO 32 → I2C SCL
 # OK it is wasteful on GPIO pins but makes the connection easy.
 # If you want to cascade more I2C devices, use normal GND and VCC
 ```
@@ -62,7 +62,7 @@ You will see a message hopefully reporting success.
 
 ## Automatically load the driver at startup
 
-Tasmota Web Interface -> Tools -> Manage Filesystem -> Edit "autoexec.be" (The white icon with the pencil)
+Tasmota Web Interface → Tools → Manage Filesystem → Edit "autoexec.be" (The white icon with the pencil)
 
 Or create a new file with this name
 
