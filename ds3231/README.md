@@ -17,8 +17,9 @@ Tasmota Web Interface → tools → Berry Scripting Console
 
 ```berry
 tasmota.urlfetch('https://raw.githubusercontent.com/pkarsy/TasmotaBerryTime/refs/heads/main/ds3231/ds3231.be')
-# Answer is 200 OK
 ```
+Answer is 200 OK
+
 Or upload the "ds3231.be" to the tasmota filesystem
 
 # Conecting the DS3231 breakout
