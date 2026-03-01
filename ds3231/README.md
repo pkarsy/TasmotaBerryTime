@@ -15,22 +15,9 @@ The tasmota system has support for DS3231, but only on custom builds. This drive
 ## Driver Installation
 Tasmota Web Interface → tools → Berry Scripting Console
 
-Paste and execeute this code
-
 ```berry
-do
-  var fn = 'ds3231.be'
-  var cl = webclient()
-  var url = 'https://raw.githubusercontent.com/pkarsy/TasmotaBerryTime/refs/heads/main/ds3231/' + fn
-  cl.begin(url)
-  if cl.GET() != 200 print('Error getting', fn) return end
-  var s = cl.get_string()
-  cl.close()
-  var f = open('/'+fn, 'w')
-  f.write(s)
-  f.close()
-  print('Installed', fn)
-end
+tasmota.urlfetch('https://raw.githubusercontent.com/pkarsy/TasmotaBerryTime/refs/heads/main/ds3231/ds3231.be')
+# Answer is 200 OK
 ```
 Or upload the "ds3231.be" to the tasmota filesystem
 
@@ -97,8 +84,8 @@ The most popular (on online stores) breakout, has a weird design choice. In part
 
 - The LIR2032 is no nearly as common, and it is more expensive than CR2032.
 - It has a very low capacity and higher shelf discharge rate than CR2032.
-- With ESP(or any other 3.3V MCU) VCC=3.3V and the LIR2032 cannot be charged.
-- It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged(not sure about this). With 3.3V the cell will be always discharged and the time will be lost on every power outage.
+- With ESP(or any other 3.3V MCU) VCC=3.3V and the LIR2032 cannot be charged at all.
+- It seems the chemistry of LIR does not allow for deep discharge, so it is destroyed if fully discharged(not sure about this). With ESP32(3.3V) the cell will be always discharged, se effectively the board works without battery backup power.(I have shown exactly this with LIR2032)
 - According to online sources, voltages more than 4.7 V can potentially damage the coin cell. This does not affect 3.3 boards.
 
 For the above reasons use the very common CR2032 cell. It can last 10 years (according to data sheets).
