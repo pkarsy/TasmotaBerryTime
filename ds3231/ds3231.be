@@ -2,7 +2,7 @@
 # https://github.com/pkarsy/TasmotaBerryTime/
 
 # We encapsulate all functionality inside this block 
-# to avoid pulluting the global namespace
+# to avoid polluting the global namespace
 do
   import strict
 
@@ -21,6 +21,8 @@ do
   # helper functions for the communication with DS3231.
   # Returns a string with len=2. For this specific case
   # the string is more handy than an integer.
+  # NOTE: no BCD range validation is performed. If the DS3231
+  # returns garbage, this produces nonsensical values silently.
   def bcd2int(x)
     return str(x/16) + str(x%16)
   end
@@ -46,7 +48,7 @@ do
     for x:t
       buf.add( int2bcd(x),1 )
     end
-    # now b contains all register values in the correct order and in BCD
+    # now buf contains all register values in the correct order and in BCD
     return buf
   end
   # end of helper functions
@@ -68,12 +70,14 @@ do
       else
         print( MSG+'found DS3231 chip' )
         # TODO dedicated UTC function
-        if tasmota.rtc_utc()<1716100000 # The system time is certainly wrong
+        if tasmota.rtc_utc()<1775000000 # The system time is certainly wrong (Apr 2026)
           self.rtc2system()
         else # The system time may be wrong/correct but we cant be sure
-          print('System time seems to be set, call rtc2system() or system2rtc() to force an update')
+          print(MSG+'System time seems to be set, call rtc2system() or system2rtc() to force an update')
         end
         # Every time the system gets NTP time the RTC is updated (about every hour)
+        # TODO: if I2C scan fails this rule is never removed, but it is harmless
+        # since active() guards against chip absence.
         tasmota.add_rule(RULE, /->self.system2rtc(), RULEID)
       end
     end
@@ -94,12 +98,13 @@ do
       t.reverse()
       t[0]='20' + t[0] # The year from 24(DS3231) -> 2024(string value)
       # Todo check unparsed and epoch > 2023
-      t = tasmota.strptime(t.concat(' ') ,"%Y %m %d %H %M %S")['epoch']
-      var ctime = 1716000000 # about the time this script is created or updated
+      t = tasmota.strptime(t.concat(' '), "%Y %m %d %H %M %S")['epoch']
+      var ctime = 1775000000 # minimum valid epoch (Apr 2026)
       if t<ctime t=ctime end # we set the time with an outdated but at least non zero value
-      # I found that the rule time#set only works when the time is set initially
-      # even whith an oudated value
-      tasmota.cmd('time ' .. t+1, true) # +1 to compensate the delay when fetching the time
+      # The rule Time#Set only fires when the system time is set initially,
+      # even with an outdated value, so we always set it.
+      # +1 is a crude workaround for the I2C read delay when fetching the time.
+      tasmota.cmd('time ' .. t+1, true)
       if t>ctime
         print(MSG+'Updated the system time from RTC chip')
       else
@@ -110,7 +115,7 @@ do
 
     def system2rtc()
       if self.w == nil
-        print(MSG + 'Cannot set the RTC time, the chip in not present')
+        print(MSG + 'Cannot set the RTC time, the chip is not present')
         return
       end
       var buf = system2bcd() # Now buf contains the suitable register values
