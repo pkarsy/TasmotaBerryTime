@@ -176,8 +176,8 @@ def gnsstime_func()
         print('The NMEA RMC sentence has less than 12 fields')
         return
       end # no of fields
-      if buf[2]!='A' # The GNSS is NOT active (no satelite signal)
-        print(MSG + 'WARNING, no valid satellite mesurement')
+      if buf[2]!='A' # The GNSS is NOT active (no satellite signal)
+        print(MSG + 'WARNING, no valid satellite measurement')
       end # active field check
       var gnss_time=buf[1] # See the RMC sentence
       var gnss_date=buf[9] # See the RMC sentence

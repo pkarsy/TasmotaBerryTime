@@ -1,11 +1,11 @@
 # GNSSTIME
 
-Tasmota berry driver to use a GNSS module (UBLOX etc) as a time source when accurate
-time keeping is needed but no WIFI network is available. Also when the AP is not in our control, and at any time can disappear or change SSID/password.
+Tasmota Berry driver to use a GNSS module (UBLOX, etc.) as a time source when accurate
+time keeping is needed but no Wi-Fi network is available. Also, when the AP is not in our control and can disappear or change SSID/password at any time.
 
 ## Note : Tasmota already has support for UBLOX GNSS modules using a custom image
 
-If you already use a custom image and your GNSS receiver is UBLOX, just #include the support in this image. This driver allows to use GNSS modules with stock ESP32(or s2 c2 c3 etc) Tasmota images, By using the standard NMEA protocol, potentially supports more GNSS receivers. Some of the information in this README may be relevant even if you are going to use the native Tasmota driver.
+If you already use a custom image and your GNSS receiver is UBLOX, just #include the support in this image. This driver allows using GNSS modules with stock ESP32 (or S2, C2, C3, etc.) Tasmota images. By using the standard NMEA protocol, it potentially supports more GNSS receivers. Some of the information in this README may be relevant even if you are going to use the native Tasmota driver.
 
 ## GNSS modules support
 
@@ -27,7 +27,7 @@ The obvious consideration with GNSS receivers is that we need to put them in a p
 
 Generally speaking, it is much easier for a receiver to get the time (even 1 satellite is enough) than to get a position. However even with this bonus, we need to be very careful about the installation site.
 
-Ideally we want it to be outdoors, but this option is not always possible (long distances from the controlled device) or safe (ie bad weather conditions, lightning etc). The type of the building is crucial and light constructions without metal and thin walls/floor are usually acceptable (barns, wooden houses etc). The location (mountains, height, terrain) and the weather can have a crucial effect on the available satellites and SNR.
+Ideally, we want it outdoors, but this option is not always possible (long distances from the controlled device) or safe (i.e., bad weather conditions, lightning, etc.). The type of building is crucial; light constructions without metal and thin walls/floors are usually acceptable (barns, wooden houses, etc.). The location (mountains, height, terrain) and the weather can have a crucial effect on the available satellites and SNR.
 
 The available receivers also differ significantly. For example the NEO-M8N seems to be better than 7 and 6 series (more satellite constellations). Even the best GNSS receivers will have problems if they are away from windows or the walls are thick etc. In this case you will probably need:
 
@@ -40,8 +40,7 @@ You can find some methods to ensure that the signal is OK, in the dedicated sect
 
 ## Connection with the MCU
 
-3 pins are needed GND VCC (3.3V but some modules have a regulator and accept 5V check the documentation) and the TX pin to any free ESP32 pin. Every GNSS module I have, is using 3.3V logic for the TX pin, but check the data sheet anyway. Do NOT set the pin as serial line (tasmota configuration menu). Just make sure
-it is unused. Check the manufacturer of the breakout, LOLIN, WEMOS, etc for the available pins (be careful, almost all ESP32 boards have some pins you rather avoid).
+3 pins are needed: GND, VCC (3.3V, but some modules have a regulator and accept 5V—check the documentation), and the TX pin to any free ESP32 pin. Every GNSS module I have uses 3.3V logic for the TX pin, but check the datasheet anyway. Do NOT set the pin as a serial line (Tasmota configuration menu). Just make sure it is unused. Check the manufacturer of the breakout (LOLIN, WEMOS, etc.) for the available pins (be careful, almost all ESP32 boards have some pins you should avoid).
 
 ## Software installation
 
@@ -63,11 +62,11 @@ end
 ```
 Or upload the file "gnsstime.be" to the tasmota filesystem.
 
-Put this to "autoexec.be", but first test in berry console :
+Put this in "autoexec.be", but first test in the Berry console:
 
 ```berry
 load('gnsstime')
-# here is the TX-pin of GNSS to the GPIO-4 of ESP32(s2)(c3) baud rate is 9600
+# here is the TX-pin of GNSS to the GPIO-4 of ESP32 (S2)(C3); baud rate is 9600.
 # The factory default for at least UBLOX NEO 6 7 8 series
 gnsstime.start(4, 9600)
 # This is for test, no need to be in autoexec
@@ -118,10 +117,10 @@ For example you can do a cold boot to see how fast you get a fix, etc.
 
 ### Important design considerations
 
-- On power up, the GNSS may need from a few seconds up to a few minutes to get the time. If the module has a battery backed RTC (like NEO 6 7 8 mentioned earlier) the RTC time becomes quickly available (about after 5 seconds, when the driver reads the GNSS for the first time).
+- On power up, the GNSS may need from a few seconds up to a few minutes to get the time. If the module has a battery-backed RTC (like the NEO 6, 7, 8 mentioned earlier), the RTC time becomes quickly available (about 5 seconds after the driver reads the GNSS for the first time).
 If however the module does not have a battery(or it is depleted), the system time will be wrong for a while.
 
-- Be careful to only start programmed actions if the system time is correct. An easy and relatively reliable way to do this (in berry code) is to ensure epoch>1700000000 or year>2023 or something similar.
+- Be careful to only start programmed actions if the system time is correct. An easy and relatively reliable way to do this (in Berry code) is to ensure epoch > 1700000000, year > 2023, or something similar.
 
 - For the usage gnsstime is designed, the power can also be unreliable, so
 
