@@ -1,7 +1,7 @@
 # GNSSTIME
 
 Tasmota Berry driver to use a GNSS module (UBLOX, etc.) as a time source when accurate
-time keeping is needed but no Wi-Fi network is available. Also, when the AP is not in our control and can disappear or change SSID/password at any time.
+timekeeping is needed but no Wi-Fi network is available. Also, when the AP is not in our control and can disappear or change SSID/password at any time.
 
 ## Note : Tasmota already has support for UBLOX GNSS modules using a custom image
 
@@ -79,7 +79,7 @@ gnsstime.update_every(3600)
 # you can load any other berry code you use.
 ```
 
-and check the console. If you prefer MQTT, enable messages :
+and check the console. If you prefer MQTT, enable messages:
 > mqttlog 2
 
 
@@ -118,11 +118,11 @@ For example you can do a cold boot to see how fast you get a fix, etc.
 ### Important design considerations
 
 - On power up, the GNSS may need from a few seconds up to a few minutes to get the time. If the module has a battery-backed RTC (like the NEO 6, 7, 8 mentioned earlier), the RTC time becomes quickly available (about 5 seconds after the driver reads the GNSS for the first time).
-If however the module does not have a battery(or it is depleted), the system time will be wrong for a while.
+If however the module does not have a battery (or it is depleted), the system time will be wrong for a while.
 
 - Be careful to only start programmed actions if the system time is correct. An easy and relatively reliable way to do this (in Berry code) is to ensure epoch > 1700000000, year > 2023, or something similar.
 
-- For the usage gnsstime is designed, the power can also be unreliable, so
+- For the use case gnsstime is designed for, the power can also be unreliable, so
 
     ```sh
     SetOption65 1
